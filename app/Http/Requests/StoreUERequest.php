@@ -6,23 +6,18 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUERequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true; // Changez cela en fonction de votre logique d'autorisation
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'libelle' => 'required|string|max:255',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date',
+            'coef' => 'required|numeric',
         ];
     }
 }

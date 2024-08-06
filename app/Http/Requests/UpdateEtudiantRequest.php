@@ -6,23 +6,25 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEtudiantRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true; 
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
+        $etudiantId = $this->route('etudiant');
+
         return [
-            //
+            'prenom' => 'sometimes|required|string|max:255',
+            'nom' => 'sometimes|required|string|max:255',
+            'date_de_naissance' => 'sometimes|required|date',
+            'adresse' => 'sometimes|required|string|max:255',
+            'telephone' => 'sometimes|required|string|max:15',
+            'matricule' => 'sometimes|required|string|unique:etudiants,matricule,' . $etudiantId,
+            'email' => 'sometimes|required|string|email|unique:etudiants,email,' . $etudiantId,
+            'mot_de_passe' => 'sometimes|required|string|min:6',
+            'photo' => 'sometimes|nullable|string|max:255',
         ];
     }
 }
