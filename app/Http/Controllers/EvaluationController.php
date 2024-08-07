@@ -2,65 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Evaluation;
 use App\Http\Requests\StoreEvaluationRequest;
 use App\Http\Requests\UpdateEvaluationRequest;
+use App\Models\Evaluation;
+use Illuminate\Http\Request;
 
 class EvaluationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Afficher toutes les évaluations
     public function index()
     {
-        //
+        $evaluations = Evaluation::with(['etudiant', 'matiere'])->get();
+        return response()->json(['message' => 'Liste des évaluations', 'data' => $evaluations], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Afficher une évaluation spécifique
+    public function show($id)
     {
-        //
+        $evaluation = Evaluation::with(['etudiant', 'matiere'])->findOrFail($id);
+        return response()->json(['message' => 'Détails de l\'évaluation', 'data' => $evaluation], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Ajouter une nouvelle évaluation
     public function store(StoreEvaluationRequest $request)
     {
-        //
+        $evaluation = Evaluation::create($request->validated());
+        return response()->json(['message' => 'Évaluation ajoutée avec succès', 'data' => $evaluation], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Evaluation $evaluation)
+    // Mettre à jour une évaluation spécifique
+    public function update(UpdateEvaluationRequest $request, $id)
     {
-        //
+        $evaluation = Evaluation::findOrFail($id);
+        $evaluation->update($request->validated());
+        return response()->json(['message' => 'Évaluation mise à jour avec succès', 'data' => $evaluation], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Evaluation $evaluation)
+    // Supprimer une évaluation spécifique (soft delete)
+    public function destroy($id)
     {
-        //
+        $evaluation = Evaluation::findOrFail($id);
+        $evaluation->delete();
+        return response()->json(['message' => 'Évaluation supprimée avec succès'], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateEvaluationRequest $request, Evaluation $evaluation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Evaluation $evaluation)
-    {
-        //
-    }
+    
 }

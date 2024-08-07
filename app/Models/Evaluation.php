@@ -12,8 +12,15 @@ class Evaluation extends Model
     protected $fillable = [
         'date',
         'valeur',
+        'etudiant_id',
         'matiere_id',
     ];
+
+    // Relation avec le modèle Etudiant
+    public function etudiant()
+    {
+        return $this->belongsTo(Etudiant::class);
+    }
 
     // Relation avec le modèle Matiere
     public function matiere()

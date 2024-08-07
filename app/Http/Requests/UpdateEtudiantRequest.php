@@ -8,12 +8,19 @@ class UpdateEtudiantRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; 
+        return true; // Ensure authorization logic is correct
     }
 
     public function rules()
     {
+        // Ensure 'etudiant' is the correct parameter name
         $etudiantId = $this->route('etudiant');
+        
+        // Verify that $etudiantId is valid and numeric
+        if (!is_numeric($etudiantId)) {
+            // Handle the case where the ID is not valid (e.g., throw a validation exception)
+            return [];
+        }
 
         return [
             'prenom' => 'sometimes|required|string|max:255',

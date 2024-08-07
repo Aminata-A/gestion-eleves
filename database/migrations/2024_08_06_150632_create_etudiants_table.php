@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('telephone');
             $table->string('matricule')->unique();
             $table->string('email')->unique();
-            $table->string('mot_de_passe');
             $table->string('photo')->nullable();
             $table->timestamps();
         });

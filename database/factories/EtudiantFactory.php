@@ -25,7 +25,6 @@ class EtudiantFactory extends Factory
             'telephone' => $this->faker->phoneNumber(),
             'matricule' => Str::random(10), 
             'email' => $this->faker->unique()->safeEmail(),
-            'mot_de_passe' => bcrypt('password'),
             'photo' => $this->faker->imageUrl(),
         ];
     }
