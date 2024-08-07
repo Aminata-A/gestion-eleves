@@ -1,56 +1,71 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
-use App\Models\Etudiant;
 use App\Http\Requests\StoreEtudiantRequest;
 use App\Http\Requests\UpdateEtudiantRequest;
-use Illuminate\Http\JsonResponse;
+use App\Models\Etudiant;
+use Illuminate\Http\Request;
 
 class EtudiantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): JsonResponse
+    // Afficher tous les étudiants
+    public function index()
     {
         $etudiants = Etudiant::all();
-        return response()->json(['data' => $etudiants], 200);
+        return $this->customJsonResponse('Liste des étudiants', $etudiants);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreEtudiantRequest $request): JsonResponse
+    // Afficher un étudiant spécifique
+    public function show($id)
+    {
+        $etudiant = Etudiant::findOrFail($id);
+        return $this->customJsonResponse('Détails de l\'étudiant', $etudiant);
+    }
+
+    // Ajouter un nouvel étudiant
+    public function store(StoreEtudiantRequest $request)
     {
         $etudiant = Etudiant::create($request->validated());
-        return response()->json(['data' => $etudiant], 201);
+        return $this->customJsonResponse('Étudiant ajouté avec succès', $etudiant, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Etudiant $etudiant): JsonResponse
+    // Mettre à jour un étudiant spécifique
+    public function update(UpdateEtudiantRequest $request, $id)
     {
-        return response()->json(['data' => $etudiant], 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateEtudiantRequest $request, Etudiant $etudiant): JsonResponse
-    {
+        $etudiant = Etudiant::findOrFail($id);
         $etudiant->update($request->validated());
-        return response()->json(['data' => $etudiant], 200);
+        return $this->customJsonResponse('Étudiant mis à jour avec succès', $etudiant);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Etudiant $etudiant): JsonResponse
+    // Supprimer un étudiant spécifique (soft delete)
+    public function destroy(Etudiant $etudiant)
     {
         $etudiant->delete();
-        return response()->json(null, 204);
+        return $this->customJsonResponse('Étudiant supprimé avec succès', null, 200);
     }
+
+    // Restaurer un étudiant supprimé
+    public function restore($id)
+    {
+        $etudiant = Etudiant::onlyTrashed()->where('id', $id)->first();
+        $etudiant->restore();
+        return $this->customJsonResponse('Étudiant restauré avec succès', $etudiant);
+    }
+
+    // Supprimer définitivement un étudiant
+    public function forceDelete($id)
+    {
+        $etudiant = Etudiant::onlyTrashed()->where('id', $id)->first();
+        $etudiant->forceDelete();
+        return $this->customJsonResponse('Étudiant supprimé définitivement', $etudiant);
+    }
+
+    // Afficher les étudiants supprimés
+    public function trashed()
+    {
+        $etudiants = Etudiant::onlyTrashed()->get();
+        return $this->customJsonResponse('Liste des étudiants supprimés', $etudiants);
+    }
+
 }

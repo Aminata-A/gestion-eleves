@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             EvaluationSeeder::class,
             MatiereSeeder::class,
             UESeeder::class,
+            UserSeeder::class
         ]);
     }
 }

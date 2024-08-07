@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Etudiant extends Model
 {
+    use SoftDeletes;
+
     use HasFactory;
 
     protected $fillable = [
@@ -17,7 +20,6 @@ class Etudiant extends Model
         'telephone',
         'matricule',
         'email',
-        'mot_de_passe',
         'photo',
     ];
 
