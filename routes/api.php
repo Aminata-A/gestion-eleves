@@ -22,7 +22,6 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('ues', UEController::class);
     
     // Routes pour les étudiants supprimés
-    Route::get('/etudiants/trashed', [EtudiantController::class, 'trashed']);
     Route::post('/etudiants/restore/{id}', [EtudiantController::class, 'restore']);
     Route::delete('/etudiants/force-delete', [EtudiantController::class, 'forceDelete']);
 
@@ -32,5 +31,5 @@ Route::middleware('auth:api')->group(function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
 });
 
-
+Route::get('/etudiants/trashed', [EtudiantController::class, 'trashed'])->middleware(['auth']);
 

@@ -67,5 +67,6 @@ class EtudiantController extends Controller
         $etudiants = Etudiant::onlyTrashed()->get();
         return $this->customJsonResponse('Liste des étudiants supprimés', $etudiants);
     }
+    
 
 }
